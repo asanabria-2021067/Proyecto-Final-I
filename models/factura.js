@@ -6,17 +6,9 @@ const FacturaSchema = Schema({
         ref: 'Usuario',
         required: true
     },
-    precioTotal: {
-        type: Number,
-        defaultValue: 0
-        // value: producto.total
+    fecha: {
+        type: Date,
     },
-    producto:[{
-        type: Schema.Types.ObjectId,
-        ref: 'Producto',
-        required: true
-    }],
-
 });
 
 

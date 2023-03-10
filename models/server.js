@@ -58,6 +58,8 @@ class Server {
         this.app.use(this.paths.facturas, require('../routes/facturas'));
         this.app.use(this.paths.productos, require('../routes/producto'));
         this.app.use(this.paths.usuarios, require('../routes/usuario'));
+        this.app.use(this.paths.usuarios, require('../routes/administrador'));
+        this.app.use(this.paths.usuarios, require('../routes/carrito'));
     }
 
 

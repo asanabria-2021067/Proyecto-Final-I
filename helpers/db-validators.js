@@ -8,7 +8,7 @@ const Producto = require('../models/producto');
 const esRoleValido = async( rol = '' ) => {
 
     const existeRol = await Role.findOne( { rol } );
-
+    console.log( existeRol );
     if ( !existeRol ) {
         throw new Error(`El rol ${ rol } no está registrado en la DB`);
     }

@@ -9,33 +9,28 @@ const { tieneRole } = require('../middlewares/validar-roles');
 
 const router = Router();
 
-router.get('/mostrar', getUsuarios);
+router.get('/mostrarClientes', getUsuarios);
 
-router.post('/agregar', [
+router.post('/agregarClientes', [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('password', 'El password debe de ser más de 6 digitos').isLength( { min: 6 } ),
     check('correo', 'El correo no es valido').isEmail(),
     check('correo').custom( emailExiste ),
-    //check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE', 'USER_ROLE', 'PROFESOR_ROLE']),
-    check('rol').custom(  esRoleValido ),
     validarCampos,
 ] ,postUsuario);
 
-router.put('/editar/:id', [
-
-    check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeUsuarioPorId ),
-    check('rol').custom(  esRoleValido ),
+router.put('/editarCliente/', [
+    validarJWT,
+    tieneRole('CLIENTE_ROLE'),
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    check('password', 'El password debe de ser más de 6 digitos').isLength( { min: 6 } ),
     validarCampos
 ] ,putUsuario);
 
 
-router.delete('/eliminar/:id', [
+router.delete('/eliminarCliente/', [
     validarJWT,
-    //esAdminRole,
-    tieneRole('ADMIN_ROLE'),
-    check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom( existeUsuarioPorId ),
+    tieneRole('CLIENTE_ROLE'),
     validarCampos
 ] ,deleteUsuario);
 

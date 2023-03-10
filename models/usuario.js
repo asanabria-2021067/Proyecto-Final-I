@@ -14,9 +14,6 @@ const UsuarioSchema = Schema({
         type: String,
         required: [true, 'El password es obligatorio' ]
     },
-    img: {
-        type: String
-    },
     rol: {
         type: String,
         required: true,
@@ -26,10 +23,19 @@ const UsuarioSchema = Schema({
         type: Boolean,
         default: true
     },
-    google: {
-        type: Boolean,
-        default: false
-    }
+    carrito: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Producto',
+    }],
+    cantidad: [{
+        type: Number,
+        default: 0
+    }],
+    total: {
+        type: Number,
+        default: 0
+    },
+    
 });
 
 

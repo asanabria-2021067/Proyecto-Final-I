@@ -1,6 +1,6 @@
 const { request, response } = require('express');
 const Categoria = require('../models/categoria');
-
+const Producto = require('../models/producto');
 
 const getCategorias = async (req = request, res = response) => {
 
@@ -74,12 +74,19 @@ const putCategoria = async (req = request, res = response) => {
 }
 
 const deleteCategoria = async (req = request, res = response) => {
-
     const { id } = req.params;
-
+    //Busca los productos que tengan esa categoria y la cambian a la por defecto
+    Producto.updateMany({ categoria: id }, { categoria: "640a9bc9a660a8a58d0ee0e0" }, (err, res) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(`productos actualizados`);
+        }
+      });
+    
     //Editar o actualiar la cateogira: Estado FALSE
-    const categoriaBorrada = await Categoria.findByIdAndUpdate(id, { estado: false }, { new: true });
-
+    const categoriaBorrada = await Categoria.findByIdAndDelete(id);
+    
     res.status(201).json(categoriaBorrada);
 
 }

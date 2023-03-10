@@ -3,10 +3,10 @@ const bcrypt = require('bcryptjs');
 //Importación del modelo
 const Usuario = require('../models/usuario');
 
-const getUsuarios = async (req = request, res = response) => {
+const getAdministrador = async (req = request, res = response) => {
 
     //condiciones del get
-    const query = { estado: true, rol: "CLIENTE_ROLE"};
+    const query = { estado: true, rol: "ADMIN_ROLE" };
 
     const listaUsuarios = await Promise.all([
         Usuario.countDocuments(query),
@@ -17,14 +17,12 @@ const getUsuarios = async (req = request, res = response) => {
 
 }
 
-const postUsuario = async (req = request, res = response) => {
+const postAdministrador = async (req = request, res = response) => {
 
-    //Desestructuración
-    rol = "CLIENTE_ROLE"
     const { nombre, correo, password } = req.body;
+    rol = "ADMIN_ROLE"
     const usuarioGuardadoDB = new Usuario({ nombre, correo, password, rol });
 
-    //Encriptar password
     const salt = bcrypt.genSaltSync();
     usuarioGuardadoDB.password = bcrypt.hashSync(password, salt);
 
@@ -33,12 +31,27 @@ const postUsuario = async (req = request, res = response) => {
 
     res.status(201).json(usuarioGuardadoDB);
 
-
 }
 
 
-const putUsuario = async (req = request, res = response) => {
+const putAdministrador = async (req = request, res = response) => {
     const id = req.usuario.id;
+
+    const { _id, correo, ...resto } = req.body;
+   
+    if ( resto.password ) {
+        const salt = bcrypt.genSaltSync();
+        resto.password = bcrypt.hashSync(resto.password, salt);
+    }
+
+    const usuarioEditado = await Usuario.findByIdAndUpdate(id, resto);
+
+    res.status(201).json(usuarioEditado);
+
+}
+
+const putClientes = async (req = request, res = response) => {
+    const { id } = req.params;
 
     const { _id,correo, ...resto } = req.body;
     //Si la password existe o viene en el req.body, la encripta
@@ -56,22 +69,31 @@ const putUsuario = async (req = request, res = response) => {
 
 }
 
-const deleteUsuario = async(req = request, res = response) => {
+const deleteClientes = async(req = request, res = response) => {
+    const { id } = req.params;
+
+    //Eliminar fisicamente de la DB
+    const usuarioEliminado = await Usuario.findByIdAndDelete( id);
+
+    res.status(201).json(usuarioEliminado);
+}
+
+const deleteAdministrador = async(req = request, res = response) => {
     const id = req.usuario.id;
 
     //Eliminar fisicamente de la DB
     const usuarioEliminado = await Usuario.findByIdAndDelete( id);
 
     res.status(201).json(usuarioEliminado);
-
 }
 
-
 module.exports = {
-    getUsuarios,
-    postUsuario,
-    putUsuario,
-    deleteUsuario,
+    getAdministrador,
+    postAdministrador,
+    putAdministrador,
+    deleteAdministrador,
+    putClientes,
+    deleteClientes
 }
 
 
