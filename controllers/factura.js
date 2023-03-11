@@ -49,8 +49,8 @@ const postFactura = async (req = request, res = response) => {
         const compruebaStock = await Producto.findById(buscarUsuario.carrito[i])
         console.log("COMPRUEBA STOCK", compruebaStock)
         if (compruebaStock.stock != 0) {
-            const stockActualizado = await Producto.findByIdAndUpdate(buscarUsuario.carrito[i], { stock: compruebaStock.stock - 1 });
-            const vendidoActualizado = await Producto.findByIdAndUpdate(buscarUsuario.carrito[i], { vendido: compruebaStock.vendido + 1 });
+            const stockActualizado = await Producto.findByIdAndUpdate(buscarUsuario.carrito[i], { stock: compruebaStock.stock - buscarUsuario.cantidad[i] });
+            const vendidoActualizado = await Producto.findByIdAndUpdate(buscarUsuario.carrito[i], { vendido: compruebaStock.vendido + buscarUsuario.cantidad[i] });
             todoBien=true;
         } else if(compruebaStock.stock == 0) {
             todoBien = false;

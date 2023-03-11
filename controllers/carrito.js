@@ -6,7 +6,7 @@ const Producto = require('../models/producto');
 const getCarrito = async (req = request, res = response) => {
     const id = req.usuario.id;
     let usuario = await Usuario.findById( id )
-    .populate('carrito', 'nombre, precio');
+    .populate('carrito', 'nombre precio stock');
     res.status(201).json( usuario );
 
 }
@@ -32,7 +32,6 @@ const postCarrito = async(req = request, res = response) => {
         console.log("Cantidad", cantidad)
         totales = precio * cantidad;
         console.log("TOTALES", totales)
-        
     }
     totalFinal = totales + totalFinal;
     }

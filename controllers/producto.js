@@ -11,7 +11,7 @@ const getProductos = async (req = request, res = response) => {
         Producto.countDocuments(query),
         Producto.find(query)
             //.populate('usuario', 'nombre')
-            .populate('usuario', 'correo')
+            .populate('usuario', 'nombre correo')
             .populate('categoria', 'nombre')
     ]);
 
@@ -40,7 +40,7 @@ const getProductosAgotados = async (req = request, res = response) => {
 
 const getProductosMasVendidos = async (req, res) => {
     //Se buscaran los productos de orden descendente por el mayor, ademas de colocar un limite de 5
-    Producto.find().sort({ vendido: -1 }).limit(1).exec((err, productos) => {
+    Producto.find().sort({ vendido: -1 }).limit(3).exec((err, productos) => {
         if (err) {
             res.status(400).json(err);
         } else {
@@ -128,12 +128,12 @@ const putProducto = async (req = request, res = response) => {
 const deleteProducto = async (req = request, res = response) => {
     const { id } = req.params;
     //Eliminar fisicamente de la DB
-    //const productoEliminado = await Producto.findByIdAndDelete( id );
+    const productoEliminado = await Producto.findByIdAndDelete( id );
     //Eliminar por el estado:false
-    const productoEliminado_ = await Producto.findByIdAndUpdate(id, { estado: false }, { new: true });
+    // const productoEliminado_ = await Producto.findByIdAndUpdate(id, { estado: false }, { new: true });
     res.json({
         msg: 'DELETE',
-        productoEliminado_
+        productoEliminado
     })
 
 }
