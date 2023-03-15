@@ -74,8 +74,14 @@ const deleteClientes = async(req = request, res = response) => {
 
     //Eliminar fisicamente de la DB
     const usuarioEliminado = await Usuario.findByIdAndDelete( id);
-
-    res.status(201).json(usuarioEliminado);
+    if(usuarioEliminado.rol != "ADMIN_ROLE"){
+        res.status(201).json(usuarioEliminado);
+    }else{
+        res.status(401).json({
+            msg: "Un administrador no puede eliminar a otro"
+        })
+    }
+   
 }
 
 const deleteAdministrador = async(req = request, res = response) => {
